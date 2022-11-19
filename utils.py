@@ -19,8 +19,8 @@ def plot_images(results_folder, images, generated, train, epoch, batch_idx):
     plt.title("Generated Images" if generated else "Real Images")
 
     filename = results_folder
-    filename += ('/train/' if train else 'val/')
-    filename += ('/generated/' if generated else 'real/')
+    filename += ('/train/' if train else '/val/')
+    filename += ('generated/' if generated else 'real/')
     filename += str(epoch) + '_' + str(batch_idx) + '.jpg'
 
     # We need to transpose the images from CWH to WHC
