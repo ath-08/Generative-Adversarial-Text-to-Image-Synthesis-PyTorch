@@ -17,6 +17,7 @@ batch_size = 128
 lr = 0.0002
 betas = (0.5, 0.999)
 print_interval = 25
+datasetFile = 'flowers.hdf5'
 
 transform = transforms.Compose([
     transforms.Resize(64),
@@ -26,8 +27,8 @@ transform = transforms.Compose([
     transforms.Normalize([0.5, 0.5, 0.5],[0.5, 0.5, 0.5])
 ])
 
-train_dataset = ImageGenDataset(filename='flowers.hdf5', split='train', transform=transform)
-val_dataset = ImageGenDataset(filename='flowers.hdf5', split='valid', transform=transform)
+train_dataset = ImageGenDataset(filename=datasetFile, split='train', transform=transform)
+val_dataset = ImageGenDataset(filename=datasetFile, split='valid', transform=transform)
 
 train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=True)
