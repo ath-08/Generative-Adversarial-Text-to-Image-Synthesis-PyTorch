@@ -127,11 +127,11 @@ class GAN_Trainer():
                 noise = torch.randn(real_img.shape[0], 100, 1, 1).to(self.device)
                 
                 fake_img = self.generator(noise, right_txt_embeds)
-                Sr = self.discriminator(real_img, right_txt_embeds)  # real image, right text
-                Sw = self.discriminator(real_img, wrong_txt_embeds)  # real image, wrong text
-                Sf = self.discriminator(fake_img, right_txt_embeds)  # fake image, right text
+                Sr, activation_real = self.discriminator(real_img, right_txt_embeds)  # real image, right text
+                Sw, _ = self.discriminator(real_img, wrong_txt_embeds)  # real image, wrong text
+                Sf, activation_fake = self.discriminator(fake_img, right_txt_embeds)  # fake image, right text
                 loss_d = self.discriminator_loss(Sr, Sw, Sf)
-                loss_g = self.generator_loss(Sf)
+                loss_g = self.generator_loss(Sf, activation_fake, activation_real, fake_img, real_img)
 
                 val_loss_g_acc += loss_g.item()*right_txt_embeds.shape[0]
                 val_loss_d_acc += loss_d.item()*right_txt_embeds.shape[0]
