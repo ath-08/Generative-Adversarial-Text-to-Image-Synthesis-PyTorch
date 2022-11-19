@@ -93,8 +93,8 @@ class GAN_Trainer():
 
             if not plotted:
                 plotted = True
-                plot_images(fake_img, generated=True, train=True, epoch=epoch, batch_idx=batch_idx)
-                plot_images(real_img, generated=False, train=True, epoch=epoch, batch_idx=batch_idx)
+                plot_images(results_folder=self.results_folder, images=fake_img, generated=True, train=True, epoch=epoch, batch_idx=batch_idx)
+                plot_images(results_folder=self.results_folder, images=real_img, generated=False, train=True, epoch=epoch, batch_idx=batch_idx)
                 
                 train_loss_g_acc += loss_g.item()*right_txt_embeds.shape[0]
                 train_loss_d_acc += loss_d.item()*right_txt_embeds.shape[0]
