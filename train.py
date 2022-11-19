@@ -68,17 +68,23 @@ class GAN_Trainer():
 
             self.discriminator_optimizer.zero_grad()
             fake_img = self.generator(noise, right_txt_embeds)
-            Sr = self.discriminator(real_img, right_txt_embeds)  # real image, right text
-            Sw = self.discriminator(real_img, wrong_txt_embeds)  # real image, wrong text
-            Sf1 = self.discriminator(fake_img, right_txt_embeds)  # fake image, right text
+            Sr, _ = self.discriminator(real_img, right_txt_embeds)  # real image, right text
+            Sw, _ = self.discriminator(real_img, wrong_txt_embeds)  # real image, wrong text
+            Sf1, _ = self.discriminator(fake_img, right_txt_embeds)  # fake image, right text
             loss_d = self.discriminator_loss(Sr, Sw, Sf1)
             loss_d.backward()
             self.discriminator_optimizer.step()
 
+
             self.generator_optimizer.zero_grad()
             fake_img = self.generator(noise, right_txt_embeds)
-            Sf2 = self.discriminator(fake_img, right_txt_embeds) 
-            loss_g = self.generator_loss(Sf2)
+            Sf2, activation_fake = self.discriminator(fake_img, right_txt_embeds)
+            _, activation_real =  self.discriminator(real_img, right_txt_embeds)
+
+            activation_fake = torch.mean(activation_fake, 0)
+            activation_real = torch.mean(activation_real, 0)
+
+            loss_g = self.generator_loss(Sf2, activation_fake, activation_real, fake_img, real_img)
             loss_g.backward()
             self.generator_optimizer.step()
 

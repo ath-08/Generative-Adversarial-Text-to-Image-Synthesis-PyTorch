@@ -45,7 +45,7 @@ class Discriminator(nn.Module):
         latent_embeds = self.concat_embeds(img, txt_embeds)
         score = self.final_block(latent_embeds)
         score = score.view(-1, 1)
-        return score.squeeze(1)
+        return score.squeeze(1), img
   
   
     def convolution_block(self, in_channels, out_channels, kernel_size=4, stride=2, padding=1, first_layer=False):
