@@ -179,13 +179,13 @@ class GAN_Trainer():
 
 
 parser = argparse.ArgumentParser(description='Train GAN')
-parser.add_argument('--epochs', default=200)
-parser.add_argument('--batch_size', default=128)
-parser.add_argument('--learning_rate', default=0.0002)
+parser.add_argument('--epochs', type=int, default=200)
+parser.add_argument('--batch_size', type=int, default=128)
+parser.add_argument('--learning_rate', type=float, default=0.0002)
 parser.add_argument('--dataset_file', default='flowers.hdf5')
-parser.add_argument('--print_interval', default=25)
+parser.add_argument('--print_interval', type=int, default=25)
 parser.add_argument('--checkpoints_folder', default='checkpoints')
-parser.add_argument('--checkpoint_interval', default=10)
+parser.add_argument('--checkpoint_interval', type=int, default=10)
 parser.add_argument('--results_folder', default='results')
 
 if __name__ == '__main__':
