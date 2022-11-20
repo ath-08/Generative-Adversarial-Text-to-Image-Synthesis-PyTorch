@@ -88,6 +88,11 @@ class GAN_Trainer():
             loss_g.backward()
             self.generator_optimizer.step()
 
+            train_loss_g_acc += loss_g.item()*right_txt_embeds.shape[0]
+            train_loss_d_acc += loss_d.item()*right_txt_embeds.shape[0]
+            d_x_acc += Sr.sum().item()
+            d_g_x_acc += Sf1.sum().item()
+
             if batch_idx % self.print_interval == 0:
                 print('Epoch', epoch, 'batch_idx', batch_idx, ': loss_d =', loss_d.item(), 'loss_g =', loss_g.item(), 'D(X) =', Sr.mean().item(), 'D(G(X)) =', Sf1.mean().item(), flush=True)
 
@@ -95,11 +100,6 @@ class GAN_Trainer():
                 plotted = True
                 plot_images(results_folder=self.results_folder, images=fake_img, generated=True, train=True, epoch=epoch, batch_idx=batch_idx)
                 plot_images(results_folder=self.results_folder, images=real_img, generated=False, train=True, epoch=epoch, batch_idx=batch_idx)
-                
-                train_loss_g_acc += loss_g.item()*right_txt_embeds.shape[0]
-                train_loss_d_acc += loss_d.item()*right_txt_embeds.shape[0]
-                d_x_acc += Sr.sum().item()
-                d_g_x_acc += Sf1.sum().item()
 
         train_loss_g_acc /= len(self.train_loader.dataset)
         train_loss_d_acc /= len(self.train_loader.dataset)
