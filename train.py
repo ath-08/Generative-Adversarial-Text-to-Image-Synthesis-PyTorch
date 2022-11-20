@@ -10,7 +10,7 @@ from loss import GeneratorLoss, DiscriminatorLoss
 from utils import weights_init, plot_images
 
 class GAN_Trainer():
-    def __init__(self, epochs, batch_size, lr, dataset_file, checkpoint_interval, print_interval, checkpoints_folder, results_folder):
+    def __init__(self, epochs, batch_size, lr, dataset_file, checkpoint_interval, print_interval, num_workers, checkpoints_folder, results_folder):
         self.epochs = epochs
         self.batch_size = batch_size
         self.lr = lr
@@ -19,6 +19,7 @@ class GAN_Trainer():
         self.checkpoints_folder = checkpoints_folder
         self.checkpoint_interval = checkpoint_interval
         self.results_folder = results_folder
+        self.num_workers = num_workers
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         self.betas = (0.5, 0.999)
@@ -34,8 +35,8 @@ class GAN_Trainer():
         self.train_dataset = ImageGenDataset(filename=self.dataset_file, split='train', transform=self.transform)
         self.val_dataset = ImageGenDataset(filename=self.dataset_file, split='valid', transform=self.transform)
 
-        self.train_loader = DataLoader(dataset=self.train_dataset, batch_size=self.batch_size, shuffle=True)
-        self.val_loader = DataLoader(dataset=self.val_dataset, batch_size=self.batch_size, shuffle=True)
+        self.train_loader = DataLoader(dataset=self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers)
+        self.val_loader = DataLoader(dataset=self.val_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers)
 
         self.generator = Generator().to(self.device)
         self.discriminator = Discriminator().to(self.device)
@@ -184,6 +185,7 @@ parser.add_argument('--batch_size', type=int, default=128)
 parser.add_argument('--learning_rate', type=float, default=0.0002)
 parser.add_argument('--dataset_file', default='flowers.hdf5')
 parser.add_argument('--print_interval', type=int, default=25)
+parser.add_argument('--num_workers', type=int, default=4)
 parser.add_argument('--checkpoints_folder', default='checkpoints')
 parser.add_argument('--checkpoint_interval', type=int, default=10)
 parser.add_argument('--results_folder', default='results')
@@ -191,7 +193,7 @@ parser.add_argument('--results_folder', default='results')
 if __name__ == '__main__':
     args = parser.parse_args()
 
-    trainer = GAN_Trainer(args.epochs, args.batch_size, args.learning_rate, args.dataset_file, args.checkpoint_interval, args.print_interval, args.checkpoints_folder, args.results_folder)
+    trainer = GAN_Trainer(args.epochs, args.batch_size, args.learning_rate, args.dataset_file, args.checkpoint_interval, args.print_interval, args.num_workers, args.checkpoints_folder, args.results_folder)
     trainer.train()
 
     print('Training completed!')
