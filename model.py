@@ -67,10 +67,10 @@ class Generator(nn.Module):
 
         self.img_size = 64
         self.num_img_channels = 3
-        self.ngf = 64
         self.inp_txt_dim = 1024
         self.projected_txt_dim = 128
         self.noise_dim = 100
+        self.ngf = 64
 
         self.projection_layer = nn.Sequential(
             nn.Linear(in_features=self.inp_txt_dim, out_features=self.projected_txt_dim),

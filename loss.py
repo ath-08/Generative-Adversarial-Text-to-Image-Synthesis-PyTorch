@@ -6,8 +6,8 @@ class GeneratorLoss(nn.Module):
         super(GeneratorLoss, self).__init__()
         self.criterion = nn.BCELoss()
         self.l1_loss = nn.L1Loss()
-        self.l2_loss = nn.MSELoss()
         self.l1_coef = 50
+        self.l2_loss = nn.MSELoss()
         self.l2_coef = 100
        
     def forward(self, Sf, activation_fake=None, activation_real=None, fake_img=None, real_img=None):
