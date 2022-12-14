@@ -1,1 +1,1 @@
-Generative Adversarial Text to Image Synthesis
+Text to Image Synthesis using GAN
